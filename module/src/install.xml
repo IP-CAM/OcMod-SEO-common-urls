@@ -14,27 +14,32 @@
     <file path="catalog/controller/startup/seo_url.php" error="log">
         <operation error="log" info="3.x">
             <search info="">
-                <![CDATA[$this->request->get['route'] = 'error/not_found';]]>
+                <![CDATA[foreach ($parts as $part)]]>
             </search>
             <add position="before"><![CDATA[
-					/// << <insertvar>MODCODE</insertvar>
-					$common_url = implode('/', $parts);
-					if ($common_url != $part) {
-						$query = $this->db->query(
-							'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
-							'WHERE ' .
-								'`keyword` = ' . "'" . $this->db->escape($common_url) . "' " .
-								'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
-							'LIMIT 1'
-						);
+			/// << <insertvar>MODCODE</insertvar>
+			if (count($parts) > 1) {
+				$complex_path = implode('/', $parts);
 
-						if ($query->num_rows && $query->row['query']) {
-							$this->request->get['route'] =  $query->row['query'];
+				$query = $this->db->query(
+					'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
+					'WHERE ' .
+						'`keyword` = ' . "'" . $this->db->escape($complex_path) . "' " .
+						'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
+					'LIMIT 1'
+				);
 
-							break;
-						}
+				if ($query->num_rows && $query->row['query']) {
+					$complex_parts = explode('=', $query->row['query']);
+
+					if (count($complex_parts) == 1) {
+						$this->request->get['route'] =  $query->row['query'];
+						$parts = array();
 					}
-					/// >> <insertvar>MODCODE</insertvar>]]></add>
+
+				}
+			}
+			/// >> <insertvar>MODCODE</insertvar>]]></add>
         </operation>
         <operation error="log" info="3.x">
             <search info="">

@@ -15,7 +15,6 @@ class ControllerExtensionModuleSeoCommonUrls extends Controller {
 		'common/home'            => '',
 		'checkout/cart'          => 'cart',
 		'checkout/checkout'      => 'checkout',
-		'checkout/voucher'       => 'voucher',
 		'product/manufacturer'   => 'brand',
 		'product/special'        => 'special',
 		'product/compare'        => 'compare',
