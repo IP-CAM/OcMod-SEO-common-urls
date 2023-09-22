@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<insertfile>_inc/summary.txt</insertfile>
+-->
+
+<modification>
+    <name>#ocmod.space: <insertvar>MODCODE</insertvar></name>
+    <code><insertvar>MODFILE</insertvar></code>
+    <version><insertvar>MODVERS</insertvar></version>
+    <author><insertvar>AUTHOR</insertvar></author>
+    <link><insertvar>XMLLINK</insertvar></link>
+
+    <file path="catalog/controller/startup/seo_url.php" error="log">
+        <operation error="log" info="3.x">
+            <search info="">
+                <![CDATA[$this->request->get['route'] = 'error/not_found';]]>
+            </search>
+            <add position="before"><![CDATA[
+					/// << <insertvar>MODCODE</insertvar>
+					$common_url = implode('/', $parts);
+					if ($common_url != $part) {
+						$query = $this->db->query(
+							'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
+							'WHERE ' .
+								'`keyword` = ' . "'" . $this->db->escape($common_url) . "' " .
+								'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
+							'LIMIT 1'
+						);
+
+						if ($query->num_rows && $query->row['query']) {
+							$this->request->get['route'] =  $query->row['query'];
+
+							break;
+						}
+					}
+					/// >> <insertvar>MODCODE</insertvar>]]></add>
+        </operation>
+        <operation error="log" info="3.x">
+            <search info="">
+                <![CDATA[} elseif ($key == 'path') {]]>
+            </search>
+            <add position="before"><![CDATA[
+				/// << <insertvar>MODCODE</insertvar>
+				} elseif ($key == 'route') {
+					if ($data['route'] == 'common/home') {
+						return $this->config->get('site_url');
+					} else {
+						$sql =
+							'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
+							'WHERE ' .
+								'`query` = ' . "'" . $this->db->escape($value) . "' " .
+							 	'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
+								'AND `language_id` = ' . (int)$this->config->get('config_language_id');
+
+						$query = $this->db->query($sql);
+
+						if ($query->num_rows && $query->row['keyword']) {
+							$url .= '/' . $query->row['keyword'];
+						}
+					}
+				/// >> <insertvar>MODCODE</insertvar>]]></add>
+        </operation>
+    </file>
+
+</modification>
