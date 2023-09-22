@@ -64,7 +64,7 @@ Compatible with OpenCart 3.x versions.
 Licensed under the [MIT License](https://raw.githubusercontent.com/ocmod-space/ocmod-seo-common-urls/main/LICENSE.txt).
 
 ## Download
-* [**OpenCart Marketplace**](https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=445444)
+* [**OpenCart Marketplace**](https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=45444)
 * [**SEO Common URLs**](https://www.ocmod.space/ocmod-seo-common-urls) web page.
 
 ## Related extensions
