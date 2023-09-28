@@ -12,7 +12,6 @@ class ControllerExtensionModuleSeoCommonUrls extends Controller {
 	private $module;
 
 	private $common_urls = array(
-		'common/home'            => '',
 		'checkout/cart'          => 'cart',
 		'checkout/checkout'      => 'checkout',
 		'product/manufacturer'   => 'brand',
@@ -121,7 +120,12 @@ class ControllerExtensionModuleSeoCommonUrls extends Controller {
 		$this->config->set($this->module . '_status', '1');
 
 		$this->load->model('setting/setting');
-		$this->model_setting_setting->editSetting($this->module, array($this->module . '_status' => 1));
+		$this->model_setting_setting->editSetting($this->module, array(
+			$this->module . '_status' => 1,
+			$this->module => array(
+				'common_urls' => $this->common_urls
+			)
+		));
 
 		$this->{$this->mmodel}->addCommonUrlKeywords($this->common_urls);
 	}

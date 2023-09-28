@@ -18,7 +18,7 @@
             </search>
             <add position="before"><![CDATA[
 			/// << <insertvar>MODCODE</insertvar>
-			if (count($parts) > 1) {
+			if ($this->config->get('module_seo_common_urls_status') && count($parts) > 1) {
 				$complex_path = implode('/', $parts);
 
 				$query = $this->db->query(
@@ -43,28 +43,35 @@
         </operation>
         <operation error="log" info="3.x">
             <search info="">
-                <![CDATA[} elseif ($key == 'path') {]]>
+                <![CDATA[parse_str($url_info['query'], $data);]]>
             </search>
-            <add position="before"><![CDATA[
-				/// << <insertvar>MODCODE</insertvar>
-				} elseif ($key == 'route') {
-					if ($data['route'] == 'common/home') {
-						return $this->config->get('site_url');
-					} else {
-						$sql =
-							'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
-							'WHERE ' .
-								'`query` = ' . "'" . $this->db->escape($value) . "' " .
-							 	'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
-								'AND `language_id` = ' . (int)$this->config->get('config_language_id');
+            <add position="after"><![CDATA[
+		/// << <insertvar>MODCODE</insertvar>
+		if ($this->config->get('module_seo_common_urls_status') && isset($data['route'])) {
+			if ($data['route'] == 'common/home') {
+				return $this->config->get('site_url') . (isset($url_info['port']) ? ':' . $url_info['port'] : '');
+			}
 
-						$query = $this->db->query($sql);
+			$common_routes = array_keys($this->config->get('module_seo_common_urls')['common_urls']);
 
-						if ($query->num_rows && $query->row['keyword']) {
-							$url .= '/' . $query->row['keyword'];
-						}
-					}
-				/// >> <insertvar>MODCODE</insertvar>]]></add>
+			if (in_array($data['route'], $common_routes )) {
+				$sql =
+					'SELECT * FROM `' . DB_PREFIX . 'seo_url` ' .
+					'WHERE ' .
+						'`query` = ' . "'" . $this->db->escape($data['route']) . "' " .
+					 	'AND `store_id` = ' . (int)$this->config->get('config_store_id') . ' ' .
+						'AND `language_id` = ' . (int)$this->config->get('config_language_id');
+
+				$query = $this->db->query($sql);
+
+				if ($query->num_rows && $query->row['keyword']) {
+					$url .= '/' . $query->row['keyword'];
+
+					unset($data['route']);
+				}
+			}
+		}
+		/// >> <insertvar>MODCODE</insertvar>]]></add>
         </operation>
     </file>
 

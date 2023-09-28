@@ -69,3 +69,4 @@ Licensed under the [MIT License](https://raw.githubusercontent.com/ocmod-space/o
 
 ## Related extensions
 * [**SEO Path**](https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=38192) - control store URLs and breadcrumb trails, implement static pagination, uses smart redirection, improve important aspects of multilingual stores and other things to make store more SEO-friendly.
+* [**SEO Redirect**](https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=45459) - is an extension to redirect old or broken requests to a new URLs using HTTP 301 response status code. So customer browser will redirect to updated URLs and search engines will notified, that the requested resource have finally moved to a new URL, and they update their links to the resource.
